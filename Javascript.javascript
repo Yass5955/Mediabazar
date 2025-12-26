@@ -1,53 +1,95 @@
-// script.js
-$(document).ready(function() {
-    // Gestion du panier
-    let cartCount = 0;
-    let cartTotal = 0;
+const ADMIN_LOGIN="admin";
+const ADMIN_PASS="1234";
+let isAdmin=false;
 
-    function updateCart() {
-        $('#cart-count').text(cartCount);
-        $('#cart-total-amount').text(cartTotal.toFixed(2) + ' €');
+const defaultData={
+  seconde:{Mathématiques:{},Français:{},"Histoire-Géo":{},"Physique-Chimie":{},SVT:{},SES:{},SNT:{}},
+  premiere:{Mathématiques:{},Français:{},"Histoire-Géo":{},"Physique-Chimie":{},SVT:{},SES:{}},
+  terminale:{Mathématiques:{},Philosophie:{},"Histoire-Géo":{},"Physique-Chimie":{},SVT:{},SES:{}}
+};
+
+let data=JSON.parse(localStorage.getItem('coursData'))||defaultData;
+
+function save(){
+  localStorage.setItem('coursData',JSON.stringify(data));
+}
+
+function render(){
+  ['seconde','premiere','terminale'].forEach(level=>{
+    const container=document.getElementById(level);
+    container.innerHTML='';
+    for(const subject in data[level]){
+      const sDiv=document.createElement('div');
+      sDiv.className='subject';
+      sDiv.innerHTML=`<h3>${subject}</h3>`;
+      for(const chap in data[level][subject]){
+        const cDiv=document.createElement('div');
+        cDiv.className='chapter';
+        cDiv.innerHTML=`<h4>${chap}</h4>`;
+        for(const sub in data[level][subject][chap]){
+          const sc=document.createElement('div');
+          sc.className='subchapter';
+          sc.innerHTML=`<a href='${data[level][subject][chap][sub]}' target='_blank'>${sub}</a>${isAdmin?` <button onclick=\"deleteSub('${level}','${subject}','${chap}','${sub}')\">X</button>`:''}`;
+          cDiv.appendChild(sc);
+        }
+        sDiv.appendChild(cDiv);
+      }
+      container.appendChild(sDiv);
     }
+  });
+}
 
-    $('.add-to-cart').on('click', function() {
-        cartCount++;
-        cartTotal += parseFloat($(this).data('price'));
-        updateCart();
-    });
+function showLevel(id,btn){
+  document.querySelectorAll('.level').forEach(l=>l.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
 
-    // Gestion des modales
-    $('.modal .close').on('click', function() {
-        $(this).closest('.modal').hide();
-    });
+function toggleLogin(){loginBox.style.display='block'}
 
-    $('#cart-icon').on('click', function(e) {
-        e.preventDefault();
-        $('#cart-modal').show();
-    });
+function loginAdmin(){
+  if(login.value===ADMIN_LOGIN && password.value===ADMIN_PASS){
+    isAdmin=true;
+    loginBox.style.display='none';
+    adminPanel.style.display='block';
+    initAdmin();
+    render();
+  } else alert('Identifiants incorrects');
+}
 
-    $('#search-icon').on('click', function(e) {
-        e.preventDefault();
-        $('#search-modal').show();
-    });
+function initAdmin(){
+  levelSelect.innerHTML='';
+  Object.keys(data).forEach(l=>levelSelect.innerHTML+=`<option value='${l}'>${l}</option>`);
+  updateSubjects();
+  levelSelect.onchange=updateSubjects;
+}
 
-    // Formulaire de contact
-    $('#contact-form').on('submit', function(e) {
-        e.preventDefault();
-        // Ici, vous pouvez ajouter le code pour envoyer le formulaire
-        alert('Message envoyé !');
-    });
+function updateSubjects(){
+  subjectSelect.innerHTML='';
+  Object.keys(data[levelSelect.value]).forEach(s=>subjectSelect.innerHTML+=`<option>${s}</option>`);
+}
 
-    // Formulaire de newsletter
-    $('#newsletter-form').on('submit', function(e) {
-        e.preventDefault();
-        // Ici, vous pouvez ajouter le code pour gérer l'abonnement à la newsletter
-        alert('Vous êtes maintenant abonné à notre newsletter !');
-    });
+function addSubChapter(){
+  const l=levelSelect.value;
+  const s=subjectSelect.value;
+  const c=chapterInput.value.trim();
+  const sc=subchapterInput.value.trim();
+  const f=fileInput.files[0];
+  if(!c||!sc||!f) return alert('Champs manquants');
+  const url=URL.createObjectURL(f);
+  if(!data[l][s][c]) data[l][s][c]={};
+  data[l][s][c][sc]=url;
+  save();
+  render();
+  chapterInput.value=subchapterInput.value=fileInput.value='';
+}
 
-    // Slider de produits
-    function loadProducts() {
-        // Ici, vous pouvez charger dynamiquement les produits depuis une API ou une base de données
-        const products = [
-            { name: 'Smartphone XYZ', price: 799, image: 'product1.jpg' },
-            { name: 'Tablette ABC', price: 499, image: 'product2.jpg' },
-            { name: 'Laptop DEF', price: 1299,
+function deleteSub(l,s,c,sc){
+  delete data[l][s][c][sc];
+  if(Object.keys(data[l][s][c]).length===0) delete data[l][s][c];
+  save();
+  render();
+}
+
+render();
