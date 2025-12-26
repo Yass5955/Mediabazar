@@ -1,183 +1,155 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MédiaBAZAR - Votre spécialiste high-tech</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <title>Bibliothèque de cours</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --primary:#4f46e5;--secondary:#1e293b;--bg:#f8fafc;--card:#fff;--text:#0f172a
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Segoe UI,system-ui;background:var(--bg);color:var(--text)}
+    header{background:linear-gradient(135deg,var(--primary),#6366f1);color:#fff;padding:30px;text-align:center}
+    nav{display:flex;justify-content:center;gap:10px;padding:15px;background:var(--secondary);flex-wrap:wrap}
+    nav button{background:transparent;border:none;color:#fff;padding:10px 18px;border-radius:8px;cursor:pointer}
+    nav button.active,nav button:hover{background:#fff;color:var(--secondary)}
+    .container{max-width:1200px;margin:auto;padding:25px}
+
+    /* LOGIN */
+    .login-box{max-width:400px;margin:40px auto;background:#fff;padding:25px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.1)}
+    .login-box input,.login-box button{width:100%;padding:12px;margin-bottom:12px;border-radius:6px;border:1px solid #c7d2fe}
+    .login-box button{background:var(--primary);color:#fff;border:none;cursor:pointer}
+
+    /* ADMIN */
+    .admin-panel{display:none;background:#eef2ff;border-radius:12px;padding:20px;margin-bottom:30px}
+    .admin-panel input,.admin-panel select,.admin-panel button{width:100%;padding:10px;margin-bottom:10px;border-radius:6px;border:1px solid #c7d2fe}
+    .admin-panel button{background:var(--primary);color:#fff;border:none}
+
+    /* CONTENT */
+    .level{display:none}
+    .level.active{display:block}
+    .subject{background:var(--card);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,.05)}
+    .subject h3{margin:0;cursor:pointer;display:flex;justify-content:space-between}
+    .pdf-list{list-style:none;padding:0;margin-top:15px;display:none}
+    .pdf-list.show{display:block}
+    .pdf-list li{display:flex;justify-content:space-between;margin-bottom:8px}
+    .pdf-list button{background:red;color:#fff;border:none;border-radius:4px;cursor:pointer;padding:4px 8px}
+
+    footer{text-align:center;padding:20px;color:#64748b}
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <img src="logo.png" alt="MédiaBAZAR Logo">
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Accueil</a></li>
-                    <li><a href="#products">Produits</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">À propos</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="user-actions">
-                <a href="#" id="search-icon"><i class="fas fa-search"></i></a>
-                <a href="#" id="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
-                <a href="#" id="account-icon"><i class="fas fa-user"></i></a>
-            </div>
-        </div>
-    </header>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="container">
-                <h1>Bienvenue chez MédiaBAZAR</h1>
-                <p>Votre destination pour tous vos besoins high-tech</p>
-                <a href="#products" class="cta-button">Découvrir nos produits</a>
-            </div>
-        </section>
+<header>
+  <h1>Bibliothèque de cours</h1>
+  <p>Accès élève & administrateur</p>
+</header>
 
-        <section id="featured-products" class="featured-products">
-            <div class="container">
-                <h2>Produits vedettes</h2>
-                <div class="product-slider">
-                    <!-- Les produits seront insérés ici dynamiquement -->
-                </div>
-            </div>
-        </section>
+<nav>
+  <button class="active" onclick="showLevel('seconde',this)">Seconde</button>
+  <button onclick="showLevel('premiere',this)">Première</button>
+  <button onclick="showLevel('terminale',this)">Terminale</button>
+  <button onclick="toggleLogin()">Admin</button>
+</nav>
 
-        <section id="services" class="services">
-            <div class="container">
-                <h2>Nos Services</h2>
-                <div class="service-grid">
-                    <div class="service-card">
-                        <i class="fas fa-tools"></i>
-                        <h3>Réparation</h3>
-                        <p>Réparation rapide et fiable pour vos appareils.</p>
-                    </div>
-                    <div class="service-card">
-                        <i class="fas fa-laptop"></i>
-                        <h3>Vente</h3>
-                        <p>Large gamme de produits high-tech.</p>
-                    </div>
-                    <div class="service-card">
-                        <i class="fas fa-headset"></i>
-                        <h3>Support</h3>
-                        <p>Assistance technique experte.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+<div class="container">
 
-        <section id="about" class="about">
-            <div class="container">
-                <h2>À propos de MédiaBAZAR</h2>
-                <p>MédiaBAZAR est votre partenaire de confiance pour tous vos besoins en technologie depuis 2010. Notre équipe d'experts passionnés est là pour vous conseiller et vous offrir le meilleur service possible.</p>
-            </div>
-        </section>
+<!-- LOGIN -->
+<div id="loginBox" class="login-box" style="display:none">
+  <h2>Connexion admin</h2>
+  <input type="text" id="login" placeholder="Identifiant">
+  <input type="password" id="password" placeholder="Mot de passe">
+  <button onclick="loginAdmin()">Se connecter</button>
+</div>
 
-        <section id="testimonials" class="testimonials">
-            <div class="container">
-                <h2>Ce que disent nos clients</h2>
-                <div class="testimonial-slider">
-                    <!-- Les témoignages seront insérés ici dynamiquement -->
-                </div>
-            </div>
-        </section>
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="admin-panel">
+  <h2>Gestion des cours</h2>
+  <select id="levelSelect"><option value="seconde">Seconde</option><option value="premiere">Première</option><option value="terminale">Terminale</option></select>
+  <select id="subjectSelect"></select>
+  <input type="text" id="titleInput" placeholder="Titre du cours">
+  <input type="file" id="fileInput" accept="application/pdf">
+  <button onclick="addCourse()">Ajouter le cours</button>
+</div>
 
-        <section id="contact" class="contact">
-            <div class="container">
-                <h2>Contactez-nous</h2>
-                <div class="contact-grid">
-                    <div class="contact-form">
-                        <form id="contact-form">
-                            <input type="text" name="name" placeholder="Votre nom" required>
-                            <input type="email" name="email" placeholder="Votre email" required>
-                            <textarea name="message" placeholder="Votre message" required></textarea>
-                            <button type="submit">Envoyer</button>
-                        </form>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Informations</h3>
-                        <p><i class="fas fa-map-marker-alt"></i> 180 Rue de la République, 59430 Dunkerque</p>
-                        <p><i class="fas fa-phone"></i> 03 28 26 98 01</p>
-                        <p><i class="fas fa-envelope"></i> contact@mediabazar.com</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+<!-- CONTENT -->
+<div id="seconde" class="level active"></div>
+<div id="premiere" class="level"></div>
+<div id="terminale" class="level"></div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <h4>MédiaBAZAR</h4>
-                    <p>Votre spécialiste high-tech à Dunkerque</p>
-                </div>
-                <div class="footer-column">
-                    <h4>Liens rapides</h4>
-                    <ul>
-                        <li><a href="#home">Accueil</a></li>
-                        <li><a href="#products">Produits</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#about">À propos</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Suivez-nous</h4>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Newsletter</h4>
-                    <form id="newsletter-form">
-                        <input type="email" placeholder="Votre email" required>
-                        <button type="submit">S'abonner</button>
-                    </form>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 MédiaBAZAR. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
+</div>
 
-    <div id="cart-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Votre panier</h2>
-            <div id="cart-items">
-                <!-- Les articles du panier seront insérés ici dynamiquement -->
-            </div>
-            <div id="cart-total">
-                <p>Total: <span id="cart-total-amount">0.00 €</span></p>
-            </div>
-            <button id="checkout-button">Passer à la caisse</button>
-        </div>
-    </div>
+<footer>© 2025 – Plateforme scolaire</footer>
 
-    <div id="search-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Recherche</h2>
-            <form id="search-form">
-                <input type="text" id="search-input" placeholder="Rechercher un produit...">
-                <button type="submit">Rechercher</button>
-            </form>
-            <div id="search-results">
-                <!-- Les résultats de recherche seront insérés ici dynamiquement -->
-            </div>
-        </div>
-    </div>
+<script>
+  const ADMIN_LOGIN="admin";
+  const ADMIN_PASS="1234";
+  let isAdmin=false;
+
+  const subjects={
+    seconde:["Mathématiques","Français","Histoire-Géo","Physique-Chimie","SVT","SES","SNT"],
+    premiere:["Mathématiques","Français","Histoire-Géo","Physique-Chimie","SVT","SES"],
+    terminale:["Mathématiques","Philosophie","Histoire-Géo","Physique-Chimie","SVT","SES"]
+  };
+
+  function init(){
+    for(const level in subjects){
+      const div=document.getElementById(level);
+      subjects[level].forEach(s=>{
+        div.innerHTML+=`<div class="subject" data-subject="${s}"><h3 onclick="togglePDF(this)">${s} <span>▼</span></h3><ul class="pdf-list"></ul></div>`
+      })
+    }
+    updateSubjects();
+  }
+
+  function showLevel(id,btn){
+    document.querySelectorAll('.level').forEach(l=>l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    updateSubjects();
+  }
+
+  function togglePDF(el){el.nextElementSibling.classList.toggle('show')}
+
+  function toggleLogin(){
+    document.getElementById('loginBox').style.display='block'
+  }
+
+  function loginAdmin(){
+    if(login.value===ADMIN_LOGIN && password.value===ADMIN_PASS){
+      isAdmin=true;
+      loginBox.style.display='none';
+      adminPanel.style.display='block';
+      alert('Mode administrateur activé');
+    } else alert('Identifiants incorrects')
+  }
+
+  function updateSubjects(){
+    const level=levelSelect.value;
+    subjectSelect.innerHTML='';
+    subjects[level].forEach(s=>subjectSelect.innerHTML+=`<option>${s}</option>`)
+  }
+
+  function addCourse(){
+    if(!isAdmin)return;
+    const level=levelSelect.value;
+    const subject=subjectSelect.value;
+    const title=titleInput.value;
+    const file=fileInput.files[0];
+    if(!title||!file)return alert('Champs manquants');
+    const url=URL.createObjectURL(file);
+    const div=[...document.querySelectorAll(`#${level} .subject`)].find(d=>d.dataset.subject===subject);
+    const li=document.createElement('li');
+    li.innerHTML=`<a href="${url}" target="_blank">${title}</a> <button onclick="this.parentElement.remove()">X</button>`;
+    div.querySelector('.pdf-list').appendChild(li);
+    div.querySelector('.pdf-list').classList.add('show');
+  }
+
+  init();
+</script>
+
 </body>
 </html>
