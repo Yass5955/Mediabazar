@@ -1,69 +1,52 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BIRAK BU ISLERI</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(-45deg, #1a1a1a, #333, #111, #222);
-      background-size: 400% 400%;
-      animation: gradientBG 10s ease infinite;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    h1 {
-      font-size: 5rem;
-      text-transform: uppercase;
-      color: #ff0000;
-      text-shadow: 0 0 15px #ff0000;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      user-select: none;
-      animation: pulse 2s infinite alternate;
-    }
-
-    @keyframes pulse {
-      from {
-        text-shadow: 0 0 15px #ff0000;
-      }
-      to {
-        text-shadow: 0 0 30px #ff4444, 0 0 60px #ff0000;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Bibliothèque de cours</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1 id="mainText">BIRAK BU ISLERI</h1>
+<header>
+  <h1>Bibliothèque de cours</h1>
+  <p>Données persistantes – GitHub Pages</p>
+</header>
 
-  <script>
-    const text = document.getElementById("mainText");
-    const colors = ["#ff0000", "#00ff00", "#00ffff", "#ffff00", "#ff00ff", "#ffffff"];
-    let index = 0;
+<nav>
+  <button class="active" onclick="showLevel('seconde', this)">Seconde</button>
+  <button onclick="showLevel('premiere', this)">Première</button>
+  <button onclick="showLevel('terminale', this)">Terminale</button>
+  <button onclick="toggleLogin()">Admin</button>
+</nav>
 
-    text.addEventListener("click", () => {
-      index = (index + 1) % colors.length;
-      text.style.color = colors[index];
-      text.style.textShadow = `0 0 20px ${colors[index]}`;
-    });
-  </script>
+<div class="container">
 
+  <div id="loginBox" class="login-box" style="display:none">
+    <h2>Connexion admin</h2>
+    <input id="login" placeholder="Identifiant">
+    <input id="password" type="password" placeholder="Mot de passe">
+    <button onclick="loginAdmin()">Connexion</button>
+  </div>
+
+  <div id="adminPanel" class="admin-panel">
+    <h2>Gestion des cours</h2>
+    <select id="levelSelect"></select>
+    <select id="subjectSelect"></select>
+    <input id="chapterInput" placeholder="Chapitre">
+    <input id="subchapterInput" placeholder="Sous-chapitre">
+    <input id="fileInput" type="file" accept="application/pdf">
+    <button onclick="addSubChapter()">Ajouter</button>
+  </div>
+
+  <div id="seconde" class="level active"></div>
+  <div id="premiere" class="level"></div>
+  <div id="terminale" class="level"></div>
+
+</div>
+
+<footer>© 2025 – Plateforme scolaire</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
